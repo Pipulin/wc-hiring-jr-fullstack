@@ -37,7 +37,79 @@ import _ from 'lodash'
 const source = $t.source(1)
 $t.answer(1, async () => {
   // Your code goes here
-  return 
+  
+
+  const sourceData = [
+    {
+      category: 'Restaurants',
+      description: 'Burger King',
+      amount: 26800,
+      type: 'expense'
+    },
+    {
+      category: 'Restaurants',
+      description: 'Pan Pa Ya',
+      amount: 16800,
+      type: 'expense'
+    },
+    {
+      category: 'Income',
+      description: 'Freelance Project 1',
+      amount: 1200000,
+      type: 'income'
+    },
+    {
+      category: 'Income',
+      description: 'Freelance Project 2',
+      amount: 1750000,
+      type: 'income'
+    },
+    {
+      category: 'Income',
+      description: 'Freelance Project 3',
+      amount: 950000,
+      type: 'income'
+    },
+    {
+      category: 'Groceries',
+      description: 'Exito',
+      amount: 250000,
+      type: 'expense'
+    },
+    {
+      category: 'Rent',
+      description: 'Rent',
+      amount: 2000000,
+      type: 'expense'
+    }
+  ];
+
+  const targetData = {
+    balance: 0,
+    income: 0,
+    expenses: 0,
+    byCategories: {}
+  };
+
+  sourceData.forEach(e => {
+    if (e.type === 'income') {
+      targetData.income += e.amount;
+       } else {
+      targetData.expenses += e.amount;
+       }
+  
+    if (!targetData.byCategories[e.category]) {
+      targetData.byCategories[e.category] = 0;
+    }
+  
+    targetData.byCategories[e.category] +=
+    e.type === 'income' ? e.amount : -e.amount;
+  });
+  
+  targetData.balance = targetData.income - targetData.expenses;
+
+  return targetData;
+
 })
 
 /*
@@ -53,5 +125,9 @@ $t.answer(2, async () => {
     // 1. Get ids: $source.getIds()
     // 2. Get text for every id: $source.getText(id)
     // 3. Return array of texts
-    return 
+
+ const ids = await $source.getIds();
+    const textPromises = ids.map(id => $source.getText(id));
+    const texts = await Promise.all(textPromises);
+    return texts;
 })
